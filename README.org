@@ -1,0 +1,9 @@
+#+title: Flutter Weekend Project Repo
+
+* Structure
+** Backend
+- Wael
+- Talal
+** Frontend
+- Hashim
+- Jaffar
