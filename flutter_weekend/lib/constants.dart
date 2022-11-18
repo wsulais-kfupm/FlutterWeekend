@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 const kHourglass = 'QuizU ⏳';
@@ -25,17 +24,27 @@ const kAppBarStyle = TextStyle(
   fontSize: 28.0,
   fontFamily: 'SourceSans',
 );
-var kHintStyle = TextStyle(
+var kHintStyle = const TextStyle(
   fontSize: 20,
   fontFamily: 'SourceSans',
   color: Colors.white,
 );
 var kButtonStyle = TextButton.styleFrom(
-  backgroundColor: Color.fromARGB(255, 40, 46, 137),
+  backgroundColor: const Color.fromARGB(255, 40, 46, 137),
 );
 const kTextButtonStyle = TextStyle(
   color: Colors.white,
-  fontSize: 24,
+  fontSize: 18,
+  fontFamily: 'SourceSans',
+);
+const kName = TextStyle(
+  color: Colors.white,
+  fontSize: 22,
+  fontFamily: 'SourceSans',
+);
+const kDescription = TextStyle(
+  color: Colors.white,
+  fontSize: 14,
   fontFamily: 'SourceSans',
 );
 const kAnswerButtonStyle = TextStyle(
