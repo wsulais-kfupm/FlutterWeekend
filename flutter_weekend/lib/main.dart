@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_weekend/constants.dart';
 import 'package:flutter_weekend/screens/home_screen.dart';
 import 'package:flutter_weekend/screens/map_screen.dart';
+import 'package:flutter_weekend/screens/registeration_screen.dart';
 // import 'package:winner/screens/profilePage.dart';
 
 Future main() async {
@@ -19,7 +20,6 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
         backgroundColor: kBackgroundColor,
-        // scaffoldBackgroundColor: kBackgroundColor,
         scaffoldBackgroundColor: Colors.transparent,
         appBarTheme: const AppBarTheme(backgroundColor: kAppBarColor),
         canvasColor: kAppBarColor,

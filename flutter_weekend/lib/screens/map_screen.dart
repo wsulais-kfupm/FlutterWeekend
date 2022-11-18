@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_weekend/components/nav_bar.dart';
 import 'package:flutter_weekend/util/location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -28,11 +29,7 @@ class _MapScreenState extends State<MapScreen> {
         break;
       }
     }
-    print(permission);
     await location.getCurrentLocation();
-    print(location.latitude);
-
-    print(location.longitude);
     if (mounted) {
       setState(() {
         loading = false;
@@ -78,6 +75,7 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ],
             ),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }
