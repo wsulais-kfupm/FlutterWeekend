@@ -1,22 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:winner/screens/profilePage.dart';
+import 'package:flutter_weekend/provider/dark_theme_provider.dart';
+import 'package:flutter_weekend/screens/btm_bar.dart';
+import 'package:flutter_weekend/screens/home_screen.dart';
+import 'package:flutter_weekend/screens/profile_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'consts/theme_data.dart';
+
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+
+  void getCurrentAppTheme() async {
+    themeChangeProvider.setDarkTheme =
+        await themeChangeProvider.darkThemePrefs.getTheme();
+  }
+
+  @override
+  void initState() {
+    getCurrentAppTheme();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const profilePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) {
+          return themeChangeProvider;
+        })
+      ],
+      child:
+          Consumer<DarkThemeProvider>(builder: (context, themeProvider, child) {
+        return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: Styles.themeData(themeProvider.getDarkTheme, context),
+            home: const BottomBarScreen(),
+            routes: {
+              
+            });
+      }),
     );
   }
 }
