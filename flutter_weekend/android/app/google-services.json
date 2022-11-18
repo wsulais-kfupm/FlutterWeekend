@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "598499004389",
+    "project_id": "winners2-5055a",
+    "storage_bucket": "winners2-5055a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598499004389:android:eaa30905c0904bd1f5690c",
+        "android_client_info": {
+          "package_name": "com.example.flutter_weekend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598499004389-fq4447r0gise8660u313fjt2q7njva4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdf4sch-jHZEF50KWAGQQYzil2iU4TmRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598499004389-fq4447r0gise8660u313fjt2q7njva4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

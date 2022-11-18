@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_weekend/constants.dart';
 import 'package:flutter_weekend/screens/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_weekend/screens/login_screen.dart';
+import 'package:flutter_weekend/screens/profile_screen.dart';
+import 'package:flutter_weekend/screens/question_screen.dart';
+import 'firebase_options.dart';
 import 'package:flutter_weekend/screens/map_screen.dart';
 import 'package:flutter_weekend/screens/registeration_screen.dart';
 // import 'package:winner/screens/profilePage.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -19,12 +25,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
-        backgroundColor: kBackgroundColor,
         scaffoldBackgroundColor: Colors.transparent,
+        backgroundColor: kBackgroundColor,
         appBarTheme: const AppBarTheme(backgroundColor: kAppBarColor),
         canvasColor: kAppBarColor,
       ),
-      home: const MapScreen(),
+      initialRoute: RegisterationScreen.id,
+      routes: {
+        RegisterationScreen.id: (context) => const RegisterationScreen(),
+        LoginScreen.id: (context) => const LoginScreen(),
+        MapScreen.id: (context) => const MapScreen(),
+        ProfileScreen.id: (context) => const ProfileScreen(),
+        HomeScreen.id: (context) => const HomeScreen(),
+        QuestionScreen.id: (context) => const QuestionScreen()
+      },
     );
   }
 }

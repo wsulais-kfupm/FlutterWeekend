@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weekend/components/custom_card.dart';
 import 'package:flutter_weekend/components/nav_bar.dart';
@@ -14,12 +16,28 @@ import '../components/custom_bubble.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  static const String id = 'home_screen';
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late User currentUser;
+  final _auth = FirebaseAuth.instance;
+  // late DocumentSnapshot data;
+
+  void getCurrentUser() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      currentUser = user;
+      print(currentUser);
+      // DocumentReference docRef =
+      //     _fireStore.collection("users").doc(currentUser.uid);
+      // data = await docRef.get();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

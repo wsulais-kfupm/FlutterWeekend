@@ -3,6 +3,7 @@ import 'package:flutter_weekend/components/nav_bar.dart';
 
 class CalanderScreen extends StatefulWidget {
   const CalanderScreen({super.key});
+  static const String id = 'calander_screen';
 
   @override
   State<CalanderScreen> createState() => _CalanderScreenState();

@@ -1,14 +1,41 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';)
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weekend/components/nav_bar.dart';
 
+// final _fireStore = FirebaseFirestore.instance;
+late User currentUser;
+final _fireStore = FirebaseFirestore.instance;
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  static const String id = 'profile_screen';
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final _auth = FirebaseAuth.instance;
+  String? name;
+  void getCurrentUser() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      currentUser = user;
+      final docRef = _fireStore.collection('users').doc(currentUser.uid);
+      DocumentSnapshot doc = await docRef.get();
+      name = doc.get('first_name');
+    }
+  }
+
+  @override
+  void initState() {
+    getCurrentUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,8 +87,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         image: DecorationImage(
                             image: AssetImage("images/default.png"),
                             fit: BoxFit.fill),
-                        // color: _isDark
-                        //     ? Theme.of(context).cardColor:
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
@@ -83,16 +108,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     top: 320,
                     left: 145,
                     child: Text(
-                      'Name',
-                      style: TextStyle(
-                        color: Colors.black,
-                        // color: _isDark
-                        //     ? Colors.white
-                        //     : Theme.of(context).cardColor,
+                      name!,
+                      // currentUser.email!,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 36,
                       ),
                     ),
@@ -122,9 +145,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 200,
                       width: 320,
                       decoration: BoxDecoration(
-                          // color: _isDark
-                          //     ? Theme.of(context).cardColor
-                          //     : Colors.white,
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(0),
                           boxShadow: [
