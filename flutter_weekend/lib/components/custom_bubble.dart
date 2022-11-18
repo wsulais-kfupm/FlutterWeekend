@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weekend/widgets/cons.dart';
 
-class CustomCard extends StatelessWidget {
-  const CustomCard(
+
+class CustomBubble extends StatelessWidget {
+  const CustomBubble(
       {super.key,
       required this.containerContent,
       required this.onPress,
@@ -16,11 +17,11 @@ class CustomCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPress,
       child: Container(
- 
-        height: 300.0,
+        width: 100.0,
+        height: 50.0,
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(25),
           color: color,
         ),
         child: containerContent,

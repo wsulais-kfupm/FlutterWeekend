@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:flutter_weekend/widgets/card_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/dark_theme_provider.dart';
@@ -18,15 +19,28 @@ class profileScreen extends StatefulWidget {
 class _profileScreenState extends State<profileScreen> {
   @override
   Widget build(BuildContext context) {
+    final Utils utils = Utils(context);
     final themeState = Provider.of<DarkThemeProvider>(context);
     bool _isDark = themeState.getDarkTheme;
+     Size size = utils.getScreenSize;
     
     return Scaffold(
       backgroundColor: _isDark ? Theme.of(context).cardColor : Colors.white,
         body: Center(
       child: Column(
+        
         children: [
-          
+          SwitchListTile(
+                secondary: Icon(themeState.getDarkTheme
+                    ? Icons.dark_mode_outlined
+                    : Icons.light_mode_outlined),
+                onChanged: (bool value) {
+                  setState(() {
+                    themeState.setDarkTheme = value;
+                  });
+                },
+                value: themeState.getDarkTheme,
+              ),
           Container(
               width: 400,
               height: 400,
@@ -49,7 +63,7 @@ class _profileScreenState extends State<profileScreen> {
                           borderRadius:
                               const BorderRadius.all(Radius.elliptical(200, 200)),
                                boxShadow: [ BoxShadow(
-                          color: Colors.grey.withOpacity(0.8),
+                          color: Colors.grey.withOpacity(0.3),
                           offset: const Offset(-10,10),
                           blurRadius: 20.0,
                           spreadRadius: 4.0,
@@ -88,7 +102,7 @@ class _profileScreenState extends State<profileScreen> {
                     child: Text(
                       'Name',
                       style: TextStyle(
-                        color: _isDark ?  Colors.white : Theme.of(context).cardColor,
+                        color: _isDark ?  Colors.white : Colors.black,
                         fontSize: 36,
                       ),
                     )),
@@ -105,78 +119,22 @@ class _profileScreenState extends State<profileScreen> {
                   ),
                 ),
               ])),
-              Container(
-                height: 200,
-               
-                child: Stack(
-                  children: [
-                    Positioned(child: Material(
-                      child: Container(height: 200,
-                      width:   320,
-                      decoration: BoxDecoration(
-                        color: _isDark ? Theme.of(context).cardColor : Colors.white,
-                        borderRadius: BorderRadius.circular(0),
-                        boxShadow: [ BoxShadow(
-                          color: Colors.grey.withOpacity(0.9),
-                          offset: const Offset(-10,10),
-                          blurRadius: 20.0,
-                          spreadRadius: 4.0,
-
-                        ),]
-                      ),
-                      
-                      
-                      
-                      ),
-                    )),Positioned(
-                      
-                      child: Card(
-                      elevation: 10,
-                      shadowColor: Colors.grey.withOpacity(0.6),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Container(
-                        height: 200,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.purple[800],
-                          
-                          
-                        ),
-                        child: Column(
-
-                        ),
-                      ),
-                      
-                      
-                        
-                    ),
-                    ),
-                    Positioned(
-                      left: 170,
-                      child: Container(
-                       
-                      child: Column(
-                        children: [
-                          SizedBox(height: 10),
-                          Text("Hi I am here", style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.purple[700]
-                          ),),
-                          Text("Hi I am here ", style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.purple[700]
-                          ),),
-                           Divider(color: Theme.of(context).cardColor,
-                          thickness: 1,),
-                        ],
-                      ),
-                    ))
-                  ],
+              
+                 Flexible(
+                  child: SizedBox(
+                    height: size.height * 0.4,
+                    width: 350,
+                    child: ListView.builder(
+                        itemCount: 10,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (ctx, index) {
+                          return const CardWidget();
+                        }),
+                  ),
                 ),
-              ),
+              
+               
+              
              
         ],
       ),
