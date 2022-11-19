@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Colors.transparent,
-        backgroundColor: kBackgroundColor,
-        appBarTheme: const AppBarTheme(backgroundColor: kAppBarColor),
-        canvasColor: kAppBarColor,
+        scaffoldBackgroundColor: Colors.white,
+        backgroundColor: Colors.purple,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.purple),
+        canvasColor: Colors.purple,
       ),
       initialRoute: WelcomeScreen.id,
       routes: {

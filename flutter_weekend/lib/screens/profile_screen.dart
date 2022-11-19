@@ -6,7 +6,7 @@ import 'package:flutter_weekend/components/card2_bubble.dart';
 import 'package:flutter_weekend/components/nav_bar.dart';
 import 'package:flutter_weekend/constants.dart';
 import 'package:flutter_weekend/misc/custom_route.dart';
-import 'package:flutter_weekend/screens/login_screen.dart';
+import 'package:flutter_weekend/screens/question_screen.dart';
 import 'package:flutter_weekend/screens/welcome_screen.dart';
 
 // final _fireStore = FirebaseFirestore.instance;
@@ -34,7 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     final dbRef =
         await _fireStore.collection('users').doc(currentUser.uid).get();
-    name = '${dbRef['first_name']} ${dbRef['last_name']}';
+    name =
+        '${dbRef['first_name'] ?? 'Random!'} ${dbRef['last_name'] ?? 'Random!'}';
     setState(() {
       _loading = false;
     });
@@ -63,9 +64,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final Utils utils = Utils(context);
-    // final themeState = Provider.of<DarkThemeProvider>(context);
-    // bool _isDark = themeState.getDarkTheme;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -77,89 +75,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                          iconSize: 60,
-                          icon: const Icon(Icons.logout),
-                          onPressed: () {
-                            _auth.signOut();
-                            Navigator.pop(context);
-                          }),
+                        iconSize: 45,
+                        icon: const Icon(Icons.settings_applications),
+                        color: Colors.black,
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              CustomRoute(
+                                  child: const QuestionScreen(),
+                                  direction: AxisDirection.left));
+                        },
+                      ),
+                      IconButton(
+                        iconSize: 45,
+                        color: Colors.black,
+                        icon: const Icon(Icons.logout),
+                        onPressed: () {
+                          _auth.signOut();
+                          logout();
+                        },
+                      ),
                     ],
                   ),
-                  // SwitchListTile(
-                  //   secondary: Icon(themeState.getDarkTheme
-                  //       ? Icons.dark_mode_outlined
-                  //       : Icons.light_mode_outlined),
-                  //   onChanged: (bool value) {
-                  //     setState(() {
-                  //       themeState.setDarkTheme = value;
-                  //     });
-                  //   },
-                  //   value: themeState.getDarkTheme,
-                  // ),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: CircleAvatar(
-                      backgroundColor: Colors.blue,
+                      backgroundImage: AssetImage('images/default.png'),
+                      // backgroundColor: Colors.blue,
                       radius: 100,
                     ),
                   ),
-                  // child: Stack(
-                  //   children: [
-                  //     Positioned(
-                  //       top: 116,
-                  //       left: 95,
-                  //       child: Container(
-                  //         width: 200,
-                  //         height: 193,
-                  //         decoration: BoxDecoration(
-                  //             color: _isDark
-                  //                 ? Theme.of(context).cardColor
-                  //                 : Colors.white,
-                  //             border: Border.all(
-                  //               color: Colors.purple,
-                  //               width: 3,
-                  //             ),
-                  //             borderRadius: const BorderRadius.all(
-                  //                 Radius.elliptical(200, 200)),
-                  //             boxShadow: [
-                  //               BoxShadow(
-                  //                 color: Colors.grey.withOpacity(0.3),
-                  //                 offset: const Offset(-10, 10),
-                  //                 blurRadius: 20.0,
-                  //                 spreadRadius: 4.0,
-                  //               ),
-                  //             ]),
-                  //       ),
-                  //     ),
-                  //     Positioned(
-                  //         top: 129,
-                  //         left: 108,
-                  //         child: Container(
-                  //           width: 174,
-                  //           height: 170,
-                  //           decoration: BoxDecoration(
-                  //             image: const DecorationImage(
-                  //                 image: AssetImage("/images/image1.png"),
-                  //                 fit: BoxFit.fill),
-                  //             color: _isDark
-                  //                 ? Theme.of(context).cardColor
-                  //                 : Colors.white,
-                  //             shape: BoxShape.circle,
-                  //           ),
-                  //         )),
-                  //     Positioned(
-                  //         top: 255,
-                  //         left: 230,
-                  //         child: Container(
-                  //             width: 45,
-                  //             height: 44,
-                  //             decoration: BoxDecoration(
-                  //               color: _isDark
-                  //                   ? Theme.of(context).cardColor
-                  //                   : Colors.white,
-                  //               borderRadius: const BorderRadius.all(
-                  //                   Radius.elliptical(45, 45)),
-                  //             ))),
                   const SizedBox(
                     height: 20,
                   ),
@@ -170,21 +115,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 50,
                   ),
-                  // Positioned(
-                  //   top: 260,
-                  //   left: 236,
-                  //   child: Container(
-                  //       width: 33,
-                  //       height: 33,
-                  //       child: const FloatingActionButton(
-                  //         onPressed: null,
-                  //         backgroundColor: Colors.purple,
-                  //         child: Icon(Icons.add),
-                  //       )),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 200,
                     width: 350,
@@ -192,7 +122,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         itemCount: 5,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return const CardWidget();
+                          return CardWidget(
+                              onPress: () => {},
+                              containerContent: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const [
+                                  Text('I WAS HERE!', style: kDescription)
+                                ],
+                              ));
                         }),
                   ),
                 ]),

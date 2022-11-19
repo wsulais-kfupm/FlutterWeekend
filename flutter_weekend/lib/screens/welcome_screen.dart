@@ -3,7 +3,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_weekend/components/rounter_button.dart';
+import 'package:flutter_weekend/components/rounded_button.dart';
 import 'package:flutter_weekend/screens/login_screen.dart';
 import 'package:flutter_weekend/screens/registeration_screen.dart';
 
@@ -54,7 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
-              children: <Widget>[
+              children: [
                 Flexible(
                   child: Hero(
                     tag: 'logo',
@@ -69,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     repeatForever: true,
                     animatedTexts: [
                       TypewriterAnimatedText(
-                        'FlutterWeekend',
+                        '   GoUten',
                         textStyle: TextStyle(
                             fontSize: 45.0,
                             fontWeight: FontWeight.w900,
@@ -83,12 +83,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 48.0,
             ),
             Roundedbutton(
-              color: Colors.lightBlueAccent,
+              color: Colors.purple.shade400,
               title: 'Log In',
               onPressed: (() => Navigator.pushNamed(context, LoginScreen.id)),
             ),
             Roundedbutton(
-              color: Colors.blueAccent,
+              color: Colors.purple.shade800,
               title: 'Register',
               onPressed: (() =>
                   Navigator.pushNamed(context, RegisterationScreen.id)),
