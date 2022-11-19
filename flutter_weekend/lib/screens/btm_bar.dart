@@ -31,7 +31,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
       'title': 'Cart Screen',
     },
     {
-      'page': const profileScreen(),
+      'page':  profileScreen(),
       'title': 'user Screen',
     },
   ];

@@ -68,9 +68,18 @@ class CardWidget extends StatelessWidget {
                               children: [
                                 Container(
                                   height: 80,
-                              width: 80,
-                              color: Colors.purple[200],
-                                )
+                              width: 120,
+                              child: Center(child: Text("Eiffel Tower", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),)),
+                                ),
+                                Container(
+                                  height: 80,
+                              width: 120,
+                              decoration: BoxDecoration(
+                              image: new DecorationImage(
+                                image: new AssetImage("assets/images/paris.jpg"),
+                                fit: BoxFit.contain,
+                              )
+                                ),),
                               ],
 
                             ),
@@ -88,17 +97,19 @@ class CardWidget extends StatelessWidget {
                     children: [
                       SizedBox(height: 10),
                       Text(
-                        "Hi I am here",
-                        style: TextStyle(fontSize: 20, color: Colors.purple[700]),
-                      ),
-                      Text(
-                        "Hi I am here ",
-                        style: TextStyle(fontSize: 16, color: Colors.purple[700]),
+                        "Paris",
+                        style: TextStyle(fontSize: 20, color: Colors.purple[700],fontWeight: FontWeight.bold),
                       ),
                       Divider(
-                        color: Theme.of(context).cardColor,
-                        thickness: 1,
+                        color: Colors.black,
+                        thickness: 2,
                       ),
+                      Text(
+                        "I am here",
+                        style: TextStyle(fontSize: 16, color: Colors.purple[700]),
+                        maxLines: 1,
+                      ),
+                      
                     ],
                   ),
                 ))
