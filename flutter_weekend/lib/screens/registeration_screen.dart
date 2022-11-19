@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_null_comparison, avoid_print
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_null_comparison, avoid_print, unused_import, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +21,6 @@ class RegisterationScreen extends StatefulWidget {
 }
 
 class _RegisterationScreenState extends State<RegisterationScreen> {
-  final _auth = FirebaseAuth.instance;
   String email = '';
   String password = '';
   bool showSpinner = false;
@@ -89,7 +88,7 @@ class _RegisterationScreenState extends State<RegisterationScreen> {
                     final _auth = FirebaseAuth.instance;
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email, password: password);
-                    User currentUser = await _auth.currentUser!;
+                    User currentUser = _auth.currentUser!;
                     await _fireStore
                         .collection('users')
                         .doc(currentUser.uid)

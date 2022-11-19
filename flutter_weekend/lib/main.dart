@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_weekend/screens/login_screen.dart';
 import 'package:flutter_weekend/screens/profile_screen.dart';
 import 'package:flutter_weekend/screens/question_screen.dart';
+import 'package:flutter_weekend/screens/welcome_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter_weekend/screens/map_screen.dart';
 import 'package:flutter_weekend/screens/registeration_screen.dart';
@@ -30,8 +31,9 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(backgroundColor: kAppBarColor),
         canvasColor: kAppBarColor,
       ),
-      initialRoute: RegisterationScreen.id,
+      initialRoute: WelcomeScreen.id,
       routes: {
+        WelcomeScreen.id: (context) => const WelcomeScreen(),
         RegisterationScreen.id: (context) => const RegisterationScreen(),
         LoginScreen.id: (context) => const LoginScreen(),
         MapScreen.id: (context) => const MapScreen(),

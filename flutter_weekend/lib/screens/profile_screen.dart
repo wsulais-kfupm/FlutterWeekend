@@ -2,7 +2,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weekend/components/card2_bubble.dart';
 import 'package:flutter_weekend/components/nav_bar.dart';
+import 'package:flutter_weekend/constants.dart';
+import 'package:flutter_weekend/misc/custom_route.dart';
+import 'package:flutter_weekend/screens/login_screen.dart';
+import 'package:flutter_weekend/screens/welcome_screen.dart';
 
 // final _fireStore = FirebaseFirestore.instance;
 late User currentUser;
@@ -19,15 +24,35 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _auth = FirebaseAuth.instance;
+  dynamic x;
   String? name;
+  bool _loading = true;
   void getCurrentUser() async {
     final user = _auth.currentUser;
     if (user != null) {
       currentUser = user;
-      final docRef = _fireStore.collection('users').doc(currentUser.uid);
-      DocumentSnapshot doc = await docRef.get();
-      name = doc.get('first_name');
     }
+    final dbRef =
+        await _fireStore.collection('users').doc(currentUser.uid).get();
+    name = '${dbRef['first_name']} ${dbRef['last_name']}';
+    setState(() {
+      _loading = false;
+    });
+    // final ref = FirebaseDatabase.instance.ref();
+    // final snapshot = await ref.child('users/${currentUser.uid}').get();
+    // if (snapshot.exists) {
+    //   print(snapshot.value);
+    // } else {
+    //   print('No data available.');
+    // }
+  }
+
+  logout() {
+    BottomNavBar.reset();
+    Navigator.pushReplacement(
+        context,
+        CustomRoute(
+            child: const WelcomeScreen(), direction: AxisDirection.left));
   }
 
   @override
@@ -38,172 +63,316 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              width: 400,
-              height: 400,
-              decoration: const BoxDecoration(
-                  // color: _isDark ? Theme.of(context).cardColor : Colors.white,
+    // final Utils utils = Utils(context);
+    // final themeState = Provider.of<DarkThemeProvider>(context);
+    // bool _isDark = themeState.getDarkTheme;
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : Center(
+                child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          iconSize: 60,
+                          icon: const Icon(Icons.logout),
+                          onPressed: () {
+                            _auth.signOut();
+                            Navigator.pop(context);
+                          }),
+                    ],
                   ),
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    top: 116,
-                    left: 95,
-                    child: Container(
-                      width: 200,
-                      height: 193,
-                      decoration: BoxDecoration(
-                        // color: _isDark
-                        //     ? Theme.of(context).cardColor:
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.purple,
-                          width: 3,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.elliptical(200, 200)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.8),
-                            offset: const Offset(-10, 10),
-                            blurRadius: 20.0,
-                            spreadRadius: 4.0,
-                          ),
-                        ],
-                      ),
+                  // SwitchListTile(
+                  //   secondary: Icon(themeState.getDarkTheme
+                  //       ? Icons.dark_mode_outlined
+                  //       : Icons.light_mode_outlined),
+                  //   onChanged: (bool value) {
+                  //     setState(() {
+                  //       themeState.setDarkTheme = value;
+                  //     });
+                  //   },
+                  //   value: themeState.getDarkTheme,
+                  // ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.blue,
+                      radius: 100,
                     ),
                   ),
-                  Positioned(
-                    top: 129,
-                    left: 108,
-                    child: Container(
-                      width: 174,
-                      height: 170,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("images/default.png"),
-                            fit: BoxFit.fill),
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
+                  // child: Stack(
+                  //   children: [
+                  //     Positioned(
+                  //       top: 116,
+                  //       left: 95,
+                  //       child: Container(
+                  //         width: 200,
+                  //         height: 193,
+                  //         decoration: BoxDecoration(
+                  //             color: _isDark
+                  //                 ? Theme.of(context).cardColor
+                  //                 : Colors.white,
+                  //             border: Border.all(
+                  //               color: Colors.purple,
+                  //               width: 3,
+                  //             ),
+                  //             borderRadius: const BorderRadius.all(
+                  //                 Radius.elliptical(200, 200)),
+                  //             boxShadow: [
+                  //               BoxShadow(
+                  //                 color: Colors.grey.withOpacity(0.3),
+                  //                 offset: const Offset(-10, 10),
+                  //                 blurRadius: 20.0,
+                  //                 spreadRadius: 4.0,
+                  //               ),
+                  //             ]),
+                  //       ),
+                  //     ),
+                  //     Positioned(
+                  //         top: 129,
+                  //         left: 108,
+                  //         child: Container(
+                  //           width: 174,
+                  //           height: 170,
+                  //           decoration: BoxDecoration(
+                  //             image: const DecorationImage(
+                  //                 image: AssetImage("/images/image1.png"),
+                  //                 fit: BoxFit.fill),
+                  //             color: _isDark
+                  //                 ? Theme.of(context).cardColor
+                  //                 : Colors.white,
+                  //             shape: BoxShape.circle,
+                  //           ),
+                  //         )),
+                  //     Positioned(
+                  //         top: 255,
+                  //         left: 230,
+                  //         child: Container(
+                  //             width: 45,
+                  //             height: 44,
+                  //             decoration: BoxDecoration(
+                  //               color: _isDark
+                  //                   ? Theme.of(context).cardColor
+                  //                   : Colors.white,
+                  //               borderRadius: const BorderRadius.all(
+                  //                   Radius.elliptical(45, 45)),
+                  //             ))),
+                  const SizedBox(
+                    height: 20,
                   ),
-                  Positioned(
-                    top: 255,
-                    left: 230,
-                    child: Container(
-                      width: 45,
-                      height: 44,
-                      decoration: const BoxDecoration(
-                        // color: _isDark
-                        //     ? Theme.of(context).cardColor
-                        //     : Colors.white,
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.all(Radius.elliptical(45, 45)),
-                      ),
-                    ),
+                  Text(
+                    '$name',
+                    style: kInputStyle,
                   ),
-                  Positioned(
-                    top: 320,
-                    left: 145,
-                    child: Text(
-                      name!,
-                      // currentUser.email!,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 36,
-                      ),
-                    ),
+                  const SizedBox(
+                    height: 50,
                   ),
-                  const Positioned(
-                    top: 260,
-                    left: 236,
-                    child: SizedBox(
-                        width: 33,
-                        height: 33,
-                        child: FloatingActionButton(
-                          onPressed: null,
-                          backgroundColor: Colors.purple,
-                          child: Icon(Icons.add),
-                        )),
+                  // Positioned(
+                  //   top: 260,
+                  //   left: 236,
+                  //   child: Container(
+                  //       width: 33,
+                  //       height: 33,
+                  //       child: const FloatingActionButton(
+                  //         onPressed: null,
+                  //         backgroundColor: Colors.purple,
+                  //         child: Icon(Icons.add),
+                  //       )),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  SizedBox(
+                    height: 200,
+                    width: 350,
+                    child: ListView.builder(
+                        itemCount: 5,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return const CardWidget();
+                        }),
                   ),
-                ],
+                ]),
               ),
-            ),
-            SizedBox(
-              height: 200,
-              child: Stack(
-                children: [
-                  Positioned(
-                      child: Material(
-                    child: Container(
-                      height: 200,
-                      width: 320,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.9),
-                              offset: const Offset(-10, 10),
-                              blurRadius: 20.0,
-                              spreadRadius: 4.0,
-                            ),
-                          ]),
-                    ),
-                  )),
-                  Positioned(
-                    child: Card(
-                      elevation: 10,
-                      shadowColor: Colors.grey.withOpacity(0.6),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Container(
-                        height: 200,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.purple[800],
-                        ),
-                        child: Column(),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 170,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(
-                          "Hi I am here",
-                          style: TextStyle(
-                              fontSize: 20, color: Colors.purple[700]),
-                        ),
-                        Text(
-                          "Hi I am here ",
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.purple[700]),
-                        ),
-                        Divider(
-                          color: Theme.of(context).cardColor,
-                          thickness: 1,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
+        bottomNavigationBar: const BottomNavBar(),
       ),
-      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }
+    // );]
+      // backgroundColor: Colors.amber,
+      // body: Center(
+      //   child: _loading ? const CircularProgressIndicator() : Column(
+      //     children: [
+      //       Text('$name'),
+      //     ],
+      //   ),
+        // child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        //   SizedBox(
+        //     child: FutureBuilder(
+        //       future: dbRef.get(),
+        //       builder: (BuildContext context, snapshot) {
+        //         if (snapshot.data != null && snapshot.hasData) {
+        //           dynamic x = snapshot.data!;
+
+        //           return Center(
+        //             child: Text(
+        //               x['first_name'],
+        //               style: kDescription,
+        //             ),
+        //           );
+        //         } else if (snapshot.connectionState ==
+        //             ConnectionState.waiting) {
+        //           return const Center(
+        //             child: CircularProgressIndicator(),
+        //           );
+        //         } else if (snapshot.hasError) {
+        //           return const Text(
+        //             'no data',
+        //             style: kDescription,
+        //           );
+        //         }
+        //         return const CircularProgressIndicator();
+        //       },
+        //     ),
+        //   )
+        // ]),
+//       ),
+//       bottomNavigationBar: const BottomNavBar(),
+//     );
+//   }
+// }
+
+// class profileScreen extends StatefulWidget {
+//   const profileScreen({Key? key}) : super(key: key);
+
+//   @override
+//   State<profileScreen> createState() => _profileScreenState();
+// }
+
+// class _profileScreenState extends State<profileScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final Utils utils = Utils(context);
+//     final themeState = Provider.of<DarkThemeProvider>(context);
+//     bool _isDark = themeState.getDarkTheme;
+//     return Scaffold(
+//       backgroundColor: _isDark ? Theme.of(context).cardColor : Colors.white,
+//         body: Center(
+//       child: Column(
+        
+//         children: [
+//           SwitchListTile(
+//                 secondary: Icon(themeState.getDarkTheme
+//                     ? Icons.dark_mode_outlined
+//                     : Icons.light_mode_outlined),
+//                 onChanged: (bool value) {
+//                   setState(() {
+//                     themeState.setDarkTheme = value;
+//                   });
+//                 },
+//                 value: themeState.getDarkTheme,
+//               ),
+//           Container(
+//               width: 400,
+//               height: 400,
+//               decoration:  BoxDecoration(
+//                 color:  _isDark ? Theme.of(context).cardColor : Colors.white,
+//               ),
+//               child: Stack(children: <Widget>[
+//                 Positioned(
+//                     top: 116,
+//                     left: 95,
+//                     child: Container(
+//                         width: 200,
+//                         height: 193,
+//                         decoration: BoxDecoration(
+//                           color: _isDark ? Theme.of(context).cardColor : Colors.white,
+//                           border: Border.all(
+//                             color: Colors.purple,
+//                             width: 3,
+//                           ),
+//                           borderRadius:
+//                               const BorderRadius.all(Radius.elliptical(200, 200)),
+//                                boxShadow: [ BoxShadow(
+//                           color: Colors.grey.withOpacity(0.3),
+//                           offset: const Offset(-10,10),
+//                           blurRadius: 20.0,
+//                           spreadRadius: 4.0,
+
+//                         ),]
+//                         ),),),
+                        
+                       
+//                 Positioned(
+//                     top: 129,
+//                     left: 108,
+//                     child: Container(
+//                       width: 174,
+//                       height: 170,
+//                       decoration:  BoxDecoration(
+//                         image: const DecorationImage(
+//                             image: AssetImage("/images/image1.png"),
+//                             fit: BoxFit.fill),
+//                         color: _isDark ? Theme.of(context).cardColor : Colors.white,
+//                         shape: BoxShape.circle,
+//                       ),
+//                     )),
+//                 Positioned(
+//                     top: 255,
+//                     left: 230,
+//                     child: Container(
+//                         width: 45,
+//                         height: 44,
+//                         decoration:  BoxDecoration(
+//                           color: _isDark ? Theme.of(context).cardColor : Colors.white,
+//                           borderRadius: const BorderRadius.all(Radius.elliptical(45, 45)),
+//                         ))),
+//                  Positioned(
+//                     top: 320,
+//                     left: 145,
+//                      child: _loading ? const CircularProgressIndicator() : Text('$name')
+//                       style: TextStyle(
+//                         color: _isDark ?  Colors.white : Colors.black,
+//                         fontSize: 36,
+//                       ),
+//                     )),
+//                 Positioned(
+//                   top: 260,
+//                   left: 236,
+//                   child: Container(
+//                     width: 33,
+//                     height: 33,
+//                     child:const FloatingActionButton(onPressed: null,
+//                     backgroundColor: Colors.purple,
+//                     child: Icon(Icons.add),
+//                     )
+//                   ),
+//                 ),
+//               ])),
+              
+//                  Flexible(
+//                   child: SizedBox(
+//                     height: size.height * 0.4,
+//                     width: 350,
+//                     child: ListView.builder(
+//                         itemCount: 10,
+//                         scrollDirection: Axis.horizontal,
+//                         itemBuilder: (ctx, index) {
+//                           return const CardWidget();
+//                         }),
+//                   ),
+//                 ),
+              
+               
+              
+             
+//         ],
+//       ),
+          
+//     ));
+//   }
+// }

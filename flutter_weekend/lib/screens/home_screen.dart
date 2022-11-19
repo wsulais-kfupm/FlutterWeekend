@@ -7,12 +7,10 @@ import 'package:flutter_weekend/constants.dart';
 
 import '../components/custom_bubble.dart';
 
-// TODO GET INTEREST FROM DB
 // TODO GET EVENTS BASED ON INTEREST
 // TODO INCLUDE MAPBOX TO FIND PLACES AND BUBBLE THEM
-// TODO GET GOOGLE MAP API KEY
-// TODO GET SPECIFIC PLACES ACCORDING TO LOCATION OR INTEREST
-// TODO EXAMPLE SHOWN IN YELP CAMP USING JS
+
+final _fireStore = FirebaseFirestore.instance;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,184 +23,247 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late User currentUser;
   final _auth = FirebaseAuth.instance;
-  // late DocumentSnapshot data;
-
+  dynamic x;
+  List<dynamic>? userPrefs;
+  bool _loading = true;
   void getCurrentUser() async {
     final user = _auth.currentUser;
     if (user != null) {
       currentUser = user;
-      print(currentUser);
-      // DocumentReference docRef =
-      //     _fireStore.collection("users").doc(currentUser.uid);
-      // data = await docRef.get();
     }
+    final dbRef =
+        await _fireStore.collection('users').doc(currentUser.uid).get();
+    userPrefs = dbRef['preferences'];
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    getCurrentUser();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.cyan,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    CustomBubble(
-                      containerContent: const Center(
-                        child: Text(
-                          'STUFF',
-                          style: kTextButtonStyle,
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.cyan,
+        body: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 70,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: userPrefs!.length,
+                          itemBuilder: (context, index) {
+                            final item = userPrefs![index];
+
+                            return CustomBubble(
+                              containerContent: Center(
+                                  child: Text(
+                                item,
+                                style: kTextButtonStyle,
+                              )),
+                              onPress: () {},
+                            );
+                          },
                         ),
+                      )
+                      // ListView(
+                      //   scrollDirection: Axis.horizontal,
+                      //   shrinkWrap: true,
+                      //   children: userPrefs.forEach((String key) {
+                      //     return CustomBubble(
+                      //       containerContent: Center(
+                      //         child: Text(
+                      //           key,
+                      //           style: kName,
+                      //         ),
+                      //       ),
+                      //       value: prefs[key],
+                      //       onChanged: (bool? value) {
+                      //         setState(
+                      //           () {
+                      //             prefs[key] = value!;
+                      //           },
+                      //         );
+                      //       },
+                      //     );
+                      //   }).toList(),
+                      // ),
+                      // SingleChildScrollView(
+                      //   scrollDirection: Axis.horizontal,
+                      //   child: Row(
+
+                      //     children: [
+                      //       CustomBubble(
+                      //         containerContent: const Center(
+                      //           child: Text(
+                      //             'STUFF',
+                      //             style: kTextButtonStyle,
+                      //           ),
+                      //         ),
+                      //         onPress: () {},
+                      //       ),
+                      //       CustomBubble(
+                      //         containerContent: const Center(
+                      //           child: Text(
+                      //             'STUFF',
+                      //             style: kTextButtonStyle,
+                      //           ),
+                      //         ),
+                      //         onPress: () {},
+                      //       ),
+                      //       CustomBubble(
+                      //         containerContent: const Center(
+                      //           child: Text(
+                      //             'STUFF',
+                      //             style: kTextButtonStyle,
+                      //           ),
+                      //         ),
+                      //         onPress: () {},
+                      //       ),
+                      //       CustomBubble(
+                      //         containerContent: const Center(
+                      //           child: Text(
+                      //             'STUFF',
+                      //             style: kTextButtonStyle,
+                      //           ),
+                      //         ),
+                      //         onPress: () {},
+                      //       ),
+                      //       CustomBubble(
+                      //         containerContent: const Center(
+                      //           child: Text(
+                      //             'STUFF',
+                      //             style: kTextButtonStyle,
+                      //           ),
+                      //         ),
+                      //         onPress: () {},
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      ,
+                      const SizedBox(
+                        height: 20.0,
                       ),
-                      onPress: () {},
-                    ),
-                    CustomBubble(
-                      containerContent: const Center(
-                        child: Text(
-                          'STUFF',
-                          style: kTextButtonStyle,
-                        ),
+                      Column(
+                        children: [
+                          CustomCard(
+                            containerContent: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(30), // Image border
+                                  child: SizedBox.fromSize(
+                                    child: Image.asset(
+                                        'images/MugiwaraOnigashima.png',
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child: Text(
+                                    'NAME OF THE THING',
+                                    style: kName,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: Text(
+                                    'small description',
+                                    style: kDescription,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onPress: () => {},
+                          ),
+                          CustomCard(
+                            containerContent: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(30), // Image border
+                                  child: SizedBox.fromSize(
+                                    child: Image.asset(
+                                        'images/MugiwaraOnigashima.png',
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child: Text(
+                                    'NAME OF THE THING',
+                                    style: kName,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: Text(
+                                    'small description',
+                                    style: kDescription,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onPress: () => {},
+                          ),
+                          CustomCard(
+                            containerContent: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(30), // Image border
+                                  child: SizedBox.fromSize(
+                                    child: Image.asset(
+                                        'images/MugiwaraOnigashima.png',
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child: Text(
+                                    'NAME OF THE THING',
+                                    style: kName,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: Text(
+                                    'small description',
+                                    style: kDescription,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onPress: () => {},
+                          )
+                        ],
                       ),
-                      onPress: () {},
-                    ),
-                    CustomBubble(
-                      containerContent: const Center(
-                        child: Text(
-                          'STUFF',
-                          style: kTextButtonStyle,
-                        ),
-                      ),
-                      onPress: () {},
-                    ),
-                    CustomBubble(
-                      containerContent: const Center(
-                        child: Text(
-                          'STUFF',
-                          style: kTextButtonStyle,
-                        ),
-                      ),
-                      onPress: () {},
-                    ),
-                    CustomBubble(
-                      containerContent: const Center(
-                        child: Text(
-                          'STUFF',
-                          style: kTextButtonStyle,
-                        ),
-                      ),
-                      onPress: () {},
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Column(
-                children: [
-                  CustomCard(
-                    containerContent: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(30), // Image border
-                          child: SizedBox.fromSize(
-                            child: Image.asset('images/MugiwaraOnigashima.png',
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            'NAME OF THE THING',
-                            style: kName,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text(
-                            'small description',
-                            style: kDescription,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPress: () => {},
-                  ),
-                  CustomCard(
-                    containerContent: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(30), // Image border
-                          child: SizedBox.fromSize(
-                            child: Image.asset('images/MugiwaraOnigashima.png',
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            'NAME OF THE THING',
-                            style: kName,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text(
-                            'small description',
-                            style: kDescription,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPress: () => {},
-                  ),
-                  CustomCard(
-                    containerContent: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(30), // Image border
-                          child: SizedBox.fromSize(
-                            child: Image.asset('images/MugiwaraOnigashima.png',
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text(
-                            'NAME OF THE THING',
-                            style: kName,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text(
-                            'small description',
-                            style: kDescription,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPress: () => {},
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
+        bottomNavigationBar: const BottomNavBar(),
       ),
-      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weekend/components/rounter_button.dart';
 import 'package:flutter_weekend/constants.dart';
 import 'package:flutter_weekend/screens/home_screen.dart';
-import 'package:flutter_weekend/screens/question_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginScreen extends StatefulWidget {

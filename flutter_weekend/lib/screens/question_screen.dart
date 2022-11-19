@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weekend/components/rounter_button.dart';
